@@ -1,31 +1,44 @@
-// 1. Setup Variables
+// --- 1. Variables (Set these at the top) ---
+let velocityY = 0; 
+let isGrounded = true; 
+const gravity = -0.015; // Slightly slower gravity for a "floaty" Mario feel
+const jumpForce = 0.4; 
 
-let velocityY = 0;
-
-let isGrounded = true;
-
-const gravity = -0.02;
-
-const jumpForce = 0.5; 
-
-// 2. The Jump Logic
-
-window.addEventListener('keydown', (e) => { 
-    if (e.code === 'Space' && isGrounded) { 
+// --- 2. The Jump Input ---
+window.addEventListener('keydown', (event) => { 
+    // This checks if you hit Space and if the car is on the ground
+    if (event.code === 'Space' && isGrounded) { 
         velocityY = jumpForce; 
         isGrounded = false; 
-
+        console.log("Jumping!"); // This helps us see if it's working in the console
     } 
 }); 
 
-// 3. The Update Loop
+// --- 3. The Physics Function ---
 function applyPhysics() { 
+    // Move the car based on its vertical speed
     car.position.y += velocityY; 
+
+    // If the car is above the ground, pull it down
     if (car.position.y > 0) { 
         velocityY += gravity; 
     } else { 
+        // If the car hits the ground, stop it
         car.position.y = 0; 
         velocityY = 0; 
         isGrounded = true; 
     } 
 }
+
+// --- 4. The Animation Loop (IMPORTANT) ---
+function animate() {
+    requestAnimationFrame(animate);
+
+    // YOU MUST CALL THE PHYSICS HERE
+    applyPhysics();
+
+    renderer.render(scene, camera);
+}
+
+// Start the game loop
+animate();
