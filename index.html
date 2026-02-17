@@ -1,0 +1,26 @@
+// 1. Add Gravity and Jump variables
+let velocityY = 0;
+let isGrounded = true;
+const gravity = -0.02;
+const jumpForce = 0.5;
+
+// 2. The Jump Logic
+window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && isGrounded) {
+        velocityY = jumpForce;
+        isGrounded = false;
+    }
+});
+
+// 3. Update Loop (Put this in your animate function)
+function applyPhysics() {
+    car.position.y += velocityY;
+    
+    if (car.position.y > 0) {
+        velocityY += gravity; // Pull the car down
+    } else {
+        car.position.y = 0;
+        velocityY = 0;
+        isGrounded = true; // Car is back on the track
+    }
+}
